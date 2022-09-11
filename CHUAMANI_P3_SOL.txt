@@ -1,0 +1,99 @@
+SQL> col name format a55
+SQL> select status,name from v$controlfile;
+
+STATUS  NAME                                                                    
+------- -------------------------------------------------------                 
+        C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\CONTROL01.CTL                    
+        C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\CONTROL02.CTL                    
+
+SQL> show parameter control_files;
+
+NAME                                 TYPE        VALUE                          
+------------------------------------ ----------- ------------------------------ 
+control_files                        string      C:\APP\CESAR\PRODUCT\18.0.0\OR 
+                                                 ADATA\XE\CONTROL01.CTL, C:\APP 
+                                                 \CESAR\PRODUCT\18.0.0\ORADATA\ 
+                                                 XE\CONTROL02.CTL               
+SQL> alter system set control_files =
+  2  'C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\CONTROL01.CTL',
+  3  'C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\CONTROL02.CTL',
+  4  'D:\CONTROLFILES\CONTROL_PC01_01.CTL',
+  5  'D:\CONTROLFILES\CONTROL_PC01_02.CTL'
+  6  scope=SPFILE;
+
+Sistema modificado.
+
+SQL> shutdown immediate
+Base de datos cerrada.
+Base de datos desmontada.
+Instancia ORACLE cerrada.
+SQL> 
+SQL> startup
+Instancia ORACLE iniciada.
+
+Total System Global Area 1610610024 bytes                                       
+Fixed Size                  9028968 bytes                                       
+Variable Size             620756992 bytes                                       
+Database Buffers          973078528 bytes                                       
+Redo Buffers                7745536 bytes                                       
+Base de datos montada.
+Base de datos abierta.
+SQL> show parameter control_files
+
+NAME                                 TYPE        VALUE                          
+------------------------------------ ----------- ------------------------------ 
+control_files                        string      C:\APP\CESAR\PRODUCT\18.0.0\OR 
+                                                 ADATA\XE\CONTROL01.CTL, C:\APP 
+                                                 \CESAR\PRODUCT\18.0.0\ORADATA\ 
+                                                 XE\CONTROL02.CTL, D:\CONTROLFI 
+                                                 LES\CONTROL_PC01_01.CTL, D:\CO 
+                                                 NTROLFILES\CONTROL_PC01_02.CTL 
+SQL> alter system set control_files =
+  2  'D:\CONTROLFILES\CONTROL_PC01_01.CTL',
+  3  'D:\CONTROLFILES\CONTROL_PC01_02.CTL'
+  4  scope=SPFILE;
+
+Sistema modificado.
+
+SQL> shutdown immediate
+Base de datos cerrada.
+Base de datos desmontada.
+Instancia ORACLE cerrada.
+SQL> startup
+Instancia ORACLE iniciada.
+
+Total System Global Area 1610610024 bytes                                       
+Fixed Size                  9028968 bytes                                       
+Variable Size             620756992 bytes                                       
+Database Buffers          973078528 bytes                                       
+Redo Buffers                7745536 bytes                                       
+Base de datos montada.
+Base de datos abierta.
+SQL> select instance_name,status from v$instance;
+
+INSTANCE_NAME    STATUS                                                         
+---------------- ------------                                                   
+xe               OPEN                                                           
+
+SQL> select name, open_mode from v$database;
+
+NAME                                                    OPEN_MODE               
+------------------------------------------------------- --------------------    
+XE                                                      READ WRITE              
+
+SQL> col name format a55
+SQL> select status,name from v$controlfile;
+
+STATUS  NAME                                                                    
+------- -------------------------------------------------------                 
+        D:\CONTROLFILES\CONTROL_PC01_01.CTL                                     
+        D:\CONTROLFILES\CONTROL_PC01_02.CTL                                     
+
+SQL> show parameter control_files
+
+NAME                                 TYPE        VALUE                          
+------------------------------------ ----------- ------------------------------ 
+control_files                        string      D:\CONTROLFILES\CONTROL_PC01_0 
+                                                 1.CTL, D:\CONTROLFILES\CONTROL 
+                                                 _PC01_02.CTL                   
+SQL> spool of

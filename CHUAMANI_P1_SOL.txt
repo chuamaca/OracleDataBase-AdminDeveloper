@@ -1,0 +1,67 @@
+SQL> conn sys as sysdba;
+Conectado.
+SQL> show pdbs
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED                 
+---------- ------------------------------ ---------- ----------                 
+         2 PDB$SEED                       READ ONLY  NO                         
+         3 XEPDB1                         READ WRITE NO                         
+SQL> CREATE PLUGGABLE DATABASE PDB_CH
+  2  ADMIN USER pdbch IDENTIFIED BY pdbch ROLES=(CONNECT)
+  3  file_name_convert = ('pdbseed','PDB_CH');
+
+Base de datos de conexión creada.
+
+SQL> alter pluggable database PDB_CH open;
+
+Base de datos de conexión modificada.
+
+SQL> alter pluggable database PDB_CH state;
+alter pluggable database PDB_CH state
+                                *
+ERROR en línea 1:
+ORA-00922: falta la opción o no es válida 
+
+
+SQL> alter pluggable database PDB_CH save state;
+
+Base de datos de conexión modificada.
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED                 
+---------- ------------------------------ ---------- ----------                 
+         2 PDB$SEED                       READ ONLY  NO                         
+         3 XEPDB1                         READ WRITE NO                         
+         4 PDB_CH                         READ WRITE NO                         
+SQL> alter session set container=PDB_CH;
+
+Sesión modificada.
+
+SQL> connect pdbch/pdbch@PDB_CH as sysdba;
+ERROR:
+ORA-12154: TNS:no se ha podido resolver el identificador de conexión 
+especificado 
+
+
+Advertencia: ¡Ya no está conectado a ORACLE!
+SQL> connect pdbch/pdbch@PDB_CH as sysdba;
+Conectado.
+SQL> set line 150
+SQL> col file_name format a60
+SQL> select file_name, tablespace_name, file_id, con_id from cdb_data_files order by tablespace_name;
+
+FILE_NAME                                                    TABLESPACE_NAME                   FILE_ID     CON_ID                                     
+------------------------------------------------------------ ------------------------------ ---------- ----------                                     
+C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\SYSAUX01.DBF   SYSAUX                                 14          4                                     
+C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\SYSTEM01.DBF   SYSTEM                                 13          4                                     
+C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\UNDOTBS01.DBF  UNDOTBS1                               15          4                                     
+
+SQL> show user;
+USER es "SYS"
+SQL> show con_name;
+
+CON_NAME                                                                                                                                              
+------------------------------                                                                                                                        
+PDB_CH                                                                                                                                                
+SQL> spool off

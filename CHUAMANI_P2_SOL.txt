@@ -1,0 +1,40 @@
+SQL> col group# format 999999
+SQL> col member format a60
+SQL> select group#,status,member from v$logfile;
+
+ GROUP# STATUS  MEMBER                                                          
+------- ------- ------------------------------------------------------------    
+      3         C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\REDO03.LOG               
+      2         C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\REDO02.LOG               
+      1         C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\REDO01.LOG               
+
+SQL> ALTER DATABASE ADD LOGFILE GROUP 4 ('C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\pc01_redo00_1.log',
+  2  'D:\REDOXE\pc01_redo00_2.log')
+  3  SIZE 30M;
+
+Base de datos modificada.
+
+SQL> col group# format 999999
+SQL> col member format a60
+SQL> select group#,status,member from v$logfile;
+
+ GROUP# STATUS  MEMBER                                                          
+------- ------- ------------------------------------------------------------    
+      3         C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\REDO03.LOG               
+      2         C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\REDO02.LOG               
+      1         C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\REDO01.LOG               
+      4         C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PC01_REDO00_1.LOG        
+      4         D:\REDOXE\PC01_REDO00_2.LOG                                     
+
+SQL> col group# format 999999
+SQL> col sequence format a50
+SQL> select group#,sequence#,status from v$log;
+
+ GROUP#  SEQUENCE# STATUS                                                       
+------- ---------- ----------------                                             
+      1         22 CURRENT                                                      
+      2         20 INACTIVE                                                     
+      3         21 INACTIVE                                                     
+      4          0 UNUSED                                                       
+
+SQL> spool of
