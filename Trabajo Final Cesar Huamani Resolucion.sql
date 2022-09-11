@@ -361,6 +361,10 @@ CREATE TABLESPACE cobranzas_data
 DATAFILE 'D:\TABLESPACE\DATA\cobranza_data_01.dbf' SIZE 50M,
 'D:\TABLESPACE\DATA\cobranza_data_02.dbf' SIZE 50M;
 
+CREATE TABLESPACE cobranzas_data
+DATAFILE 'C:\app\Cesar\product\18.0.0\oradata\XE\PDB_CH\cobranza_data_01.dbf' SIZE 50M,
+'C:\app\Cesar\product\18.0.0\oradata\XE\PDB_CH\cobranza_data_02.dbf' SIZE 50M;
+
 
 
 set line 180
@@ -389,4 +393,23 @@ select tablespace_name,file_name,bytes from dba_data_files;
 
 
 select * from v$tablespace;
+
+
+
+/*
+Pregunta 5: (1.00 puntos) 
+Crear el usuario COBRANZAS con las siguientes características; 
+•	La contraseña será Lima1234 
+•	Asignar como tablespace por defecto al tablespace cobranzas _data. 
+
+*/
+
+create user cobranzas IDENTIFIED by Lima1234
+DEFAULT TABLESPACE cobranzas_data;
+
+GRANT CONNECT TO cobranzas;
+
+connect cobranzas/Lima1234@PDB_CH;
+
+select username from DBA_users;
 

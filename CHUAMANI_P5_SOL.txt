@@ -1,0 +1,91 @@
+SQL> alter session set containet=PDB_CH;
+alter session set containet=PDB_CH
+                  *
+ERROR en línea 1:
+ORA-02248: opción no válida para ALTER SESSION 
+
+
+SQL> alter session set containeR=PDB_CH;
+
+Sesión modificada.
+
+SQL> select * from v$tablespace;
+
+       TS# NAME                           INC BIG FLA ENC     CON_ID            
+---------- ------------------------------ --- --- --- --- ----------            
+         0 SYSTEM                         YES NO  YES              4            
+         1 SYSAUX                         YES NO  YES              4            
+         2 UNDOTBS1                       YES NO  YES              4            
+         3 TEMP                           NO  NO  YES              4            
+         5 COBRANZAS_DATA                 YES NO  YES              4            
+         6 COBRANZAS_INDEX                YES NO  YES              4            
+
+6 filas seleccionadas.
+
+SQL> create user cobranzas IDENTIFIED by Lima1234
+  2  DEFAULT TABLESPACE cobranzas_data;
+
+Usuario creado.
+
+SQL> select username from DBA_users;
+
+USERNAME                                                                        
+--------------------------------------------------------------------------------
+SYS                                                                             
+SYSTEM                                                                          
+XS$NULL                                                                         
+GSMCATUSER                                                                      
+MDDATA                                                                          
+SYSBACKUP                                                                       
+REMOTE_SCHEDULER_AGENT                                                          
+GSMUSER                                                                         
+SYSRAC                                                                          
+PDBCH                                                                           
+OJVMSYS                                                                         
+
+USERNAME                                                                        
+--------------------------------------------------------------------------------
+AUDSYS                                                                          
+DIP                                                                             
+LBACSYS                                                                         
+SYSKM                                                                           
+OUTLN                                                                           
+ORACLE_OCM                                                                      
+SYS$UMF                                                                         
+SYSDG                                                                           
+DBSNMP                                                                          
+APPQOSSYS                                                                       
+DBSFWUSER                                                                       
+
+USERNAME                                                                        
+--------------------------------------------------------------------------------
+GGSYS                                                                           
+ANONYMOUS                                                                       
+CTXSYS                                                                          
+DVSYS                                                                           
+SI_INFORMTN_SCHEMA                                                              
+DVF                                                                             
+GSMADMIN_INTERNAL                                                               
+ORDPLUGINS                                                                      
+MDSYS                                                                           
+OLAPSYS                                                                         
+ORDDATA                                                                         
+
+USERNAME                                                                        
+--------------------------------------------------------------------------------
+XDB                                                                             
+WMSYS                                                                           
+ORDSYS                                                                          
+COBRANZAS                                                                       
+
+37 filas seleccionadas.
+
+SQL> GRAND CONNECT TO cobranzas;
+SP2-0734: inicio "GRAND CONN..." de comando desconocido - resto de la línea ignorado.
+SQL> GRANT CONNECT TO cobranzas;
+
+Concesión terminada correctamente.
+
+SQL> connect cobranzas/Lima1234@PDB_CH;
+Conectado.
+SQL> spool off
