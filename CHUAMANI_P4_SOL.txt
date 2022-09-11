@@ -1,0 +1,84 @@
+SQL> alter session set container=PDB_CH;
+
+Sesión modificada.
+
+SQL> set line 180
+SQL> col TABLESPACE_NAME format a15
+SQL> col FILE_NAME format a60
+SQL> select tablespace_name,file_name,bytes from dba_data_files;
+
+TABLESPACE_NAME FILE_NAME                                                         BYTES                                                                                             
+--------------- ------------------------------------------------------------ ----------                                                                                             
+SYSTEM          C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\SYSTEM01.DBF    272629760                                                                                             
+SYSAUX          C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\SYSAUX01.DBF    408944640                                                                                             
+UNDOTBS1        C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\UNDOTBS01.DBF   104857600                                                                                             
+
+SQL> select * from v$tablespace;
+
+       TS# NAME                           INC BIG FLA ENC     CON_ID                                                                                                                
+---------- ------------------------------ --- --- --- --- ----------                                                                                                                
+         0 SYSTEM                         YES NO  YES              4                                                                                                                
+         1 SYSAUX                         YES NO  YES              4                                                                                                                
+         2 UNDOTBS1                       YES NO  YES              4                                                                                                                
+         3 TEMP                           NO  NO  YES              4                                                                                                                
+
+SQL> 
+SQL> CREATE TABLESPACE cobranzas_data
+  2  DATAFILE 'D:\TABLESPACE\DATA\cobranza_data_01.dbf' SIZE 50M,
+  3  'D:\TABLESPACE\DATA\cobranza_data_02.dbf' SIZE 50M;
+
+Tablespace creado.
+
+SQL> set line 180
+SQL> col TABLESPACE_NAME format a15
+SQL> col FILE_NAME format a60
+SQL> select tablespace_name,file_name,bytes from dba_data_files;
+
+TABLESPACE_NAME FILE_NAME                                                         BYTES                                                                                             
+--------------- ------------------------------------------------------------ ----------                                                                                             
+SYSTEM          C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\SYSTEM01.DBF    272629760                                                                                             
+SYSAUX          C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\SYSAUX01.DBF    408944640                                                                                             
+UNDOTBS1        C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\UNDOTBS01.DBF   104857600                                                                                             
+COBRANZAS_DATA  D:\TABLESPACE\DATA\COBRANZA_DATA_01.DBF                        52428800                                                                                             
+COBRANZAS_DATA  D:\TABLESPACE\DATA\COBRANZA_DATA_02.DBF                        52428800                                                                                             
+
+SQL> CREATE TABLESPACE cobranzas_index
+  2  DATAFILE 'D:\TABLESPACE\INDEX\cobranzas_index_d1.dbf' SIZE 8M,
+  3  'D:\TABLESPACE\INDEX\cobranzas_index_d2.dbf' SIZE 8M,
+  4  'D:\TABLESPACE\INDEX\cobranzas_index_d3.dbf' SIZE 8M
+  5  EXTENT MANAGEMENT LOCAL;
+
+Tablespace creado.
+
+SQL> set line 180
+SQL> col TABLESPACE_NAME format a15
+SQL> col FILE_NAME format a60
+SQL> select tablespace_name,file_name,bytes from dba_data_files;
+
+TABLESPACE_NAME FILE_NAME                                                         BYTES                                                                                             
+--------------- ------------------------------------------------------------ ----------                                                                                             
+SYSTEM          C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\SYSTEM01.DBF    272629760                                                                                             
+SYSAUX          C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\SYSAUX01.DBF    408944640                                                                                             
+UNDOTBS1        C:\APP\CESAR\PRODUCT\18.0.0\ORADATA\XE\PDB_CH\UNDOTBS01.DBF   104857600                                                                                             
+COBRANZAS_DATA  D:\TABLESPACE\DATA\COBRANZA_DATA_01.DBF                        52428800                                                                                             
+COBRANZAS_DATA  D:\TABLESPACE\DATA\COBRANZA_DATA_02.DBF                        52428800                                                                                             
+COBRANZAS_INDEX D:\TABLESPACE\INDEX\COBRANZAS_INDEX_D1.DBF                      8388608                                                                                             
+COBRANZAS_INDEX D:\TABLESPACE\INDEX\COBRANZAS_INDEX_D2.DBF                      8388608                                                                                             
+COBRANZAS_INDEX D:\TABLESPACE\INDEX\COBRANZAS_INDEX_D3.DBF                      8388608                                                                                             
+
+8 filas seleccionadas.
+
+SQL> select * from v$tablespace;
+
+       TS# NAME                           INC BIG FLA ENC     CON_ID                                                                                                                
+---------- ------------------------------ --- --- --- --- ----------                                                                                                                
+         0 SYSTEM                         YES NO  YES              4                                                                                                                
+         1 SYSAUX                         YES NO  YES              4                                                                                                                
+         2 UNDOTBS1                       YES NO  YES              4                                                                                                                
+         3 TEMP                           NO  NO  YES              4                                                                                                                
+         5 COBRANZAS_DATA                 YES NO  YES              4                                                                                                                
+         6 COBRANZAS_INDEX                YES NO  YES              4                                                                                                                
+
+6 filas seleccionadas.
+
+SQL> spool off

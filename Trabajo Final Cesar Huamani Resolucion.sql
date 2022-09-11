@@ -267,3 +267,126 @@ select name, open_mode from v$database;
 col name format a55
 select status,name from v$controlfile;
 
+
+/* Ejercio 04 
+CHUAMANI_P4_SOL.txt
+
+
+Crear el tablespace cobranzas_data en “PDB_XX” el cual deberá contener 2 datafiles  llamados “cobranza_data_01” y “cobranza_data_02”. Considerar lo siguiente:
+
+a) El espacio disponible del tablespace será de 50MB.  
+b)	Cada datafile deberá usar el estándar para las extensiones de los archivos. 
+c)	La ubicación de los datafiles deberá cumplir con las buenas prácticas establecidas.  
+ 
+Crear el tablespace cobranzas_index en “PDB_XX” el cual deberá contener en total un tamaño de 24 MB.
+  (el nombre de los datafiles queda a su criterio) 
+  
+d)	Asegúrese de que los datafiles que conforman deberá usar el estándar para las extensiones de los archivos. 
+e)	Debe de contener un total de 3 datafiles de igual tamaño. 
+f)	La ubicación de los datafiles deberá cumplir con las buenas prácticas establecidas.  
+
+DB: PDB_CH
+TableSpace: cobranzas_data
+datafiles 50MB: cobranza_data_01, cobranza_data_02
+extensiones
+
+DB: PDB_CH de 24 MB
+TableSpace: cobranzas_index
+datafiles: cobranzas_index_d1, cobranzas_index_d2, cobranzas_index_d3
+
+Todos en la RUTA D:
+
+
+alter session set container=PDB_CH;
+*/
+
+
+
+/*
+select tablespace_name,status from dba_tablespaces;
+
+
+*/
+
+/*
+--probar
+CREATE TABLESPACE cobranzas_data
+DATAFILE 'C:\app\Cesar\product\18.0.0\oradata\XE\PDB_CH\cobranza_data_01.dbf'
+SIZE 25M
+autoextend on next 1M
+--maxsize 50M
+EXTENT MANAGEMENT LOCAL;
+
+CREATE TABLESPACE cobranzas_data
+DATAFILE 'C:\app\Cesar\product\18.0.0\oradata\XE\PDB_CH\cobranza_data_01.dbf'
+SIZE 25M
+AUTOEXTEND OFF
+maxsize 50M
+EXTENT MANAGEMENT LOCAL;
+--
+
+
+
+CREATE TABLESPACE cobranzas_data
+DATAFILE 'C:\app\Cesar\product\18.0.0\oradata\XE\PDB_CH\cobranza_data_01.dbf'
+SIZE 25M
+EXTENT MANAGEMENT LOCAL
+UNIFORM SIZE 100K;
+
+--Agregar un Arhcivo Data fILE a UN Table Space
+ALTER TABLESPACE cobranzas_data
+ADD DATAFILE 'C:\app\Cesar\product\18.0.0\oradata\XE\PDB_CH\cobranza_data_02.dbf'
+SIZE 50M;
+
+--resice de un Archivo DataFile
+ALTER DATABASE DATAFILE
+'D: ORADAT data02.dbf' RESIZE 1500K;
+
+ALTER TABLESPACE cobranzas_data RESIZE 50M;
+
+--Para Borrar Un DataFile.
+ALTER TABLESPACE cobranzas_data DROP DATAFILE 'C:\app\Cesar\product\18.0.0\oradata\XE\PDB_CH\cobranza_data_03.DBF';
+
+--Para Borrar un TableSpcae incluyendo sus DataFiles.
+drop tablespace cobranzas_data including contents and datafiles;
+
+--Que no Ex autoExtendible
+CREATE TABLESPACE omf_ts2 DATAFILE AUTOEXTEND OFF;
+*/
+
+conn /@PDB_CH as sysdba;
+
+
+CREATE TABLESPACE cobranzas_data
+DATAFILE 'D:\TABLESPACE\DATA\cobranza_data_01.dbf' SIZE 50M,
+'D:\TABLESPACE\DATA\cobranza_data_02.dbf' SIZE 50M;
+
+
+
+set line 180
+col TABLESPACE_NAME format a15
+col FILE_NAME format a60
+select tablespace_name,file_name,bytes from dba_data_files;
+
+
+select * from v$tablespace;
+
+--Consulta de TableSpcae
+--select tablespace_name,status,max_size, block_size from dba_tablespaces;
+
+
+CREATE TABLESPACE cobranzas_index
+DATAFILE 'D:\TABLESPACE\INDEX\cobranzas_index_d1.dbf' SIZE 8M,
+'D:\TABLESPACE\INDEX\cobranzas_index_d2.dbf' SIZE 8M,
+'D:\TABLESPACE\INDEX\cobranzas_index_d3.dbf' SIZE 8M
+EXTENT MANAGEMENT LOCAL;
+
+
+set line 180
+col TABLESPACE_NAME format a15
+col FILE_NAME format a60
+select tablespace_name,file_name,bytes from dba_data_files;
+
+
+select * from v$tablespace;
+
