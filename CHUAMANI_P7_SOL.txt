@@ -1,0 +1,54 @@
+SQL> create role COBRANZAS_DESARROLLO;
+
+Rol creado.
+
+SQL> grant connect, create view,create table, create procedure  to COBRANZAS_DESARROLLO;
+
+Concesión terminada correctamente.
+
+SQL> grant COBRANZAS_DESARROLLO to COBRANZAS;
+
+Concesión terminada correctamente.
+
+SQL> set line 200
+SQL> col role format a25
+SQL> select * from dba_roles where role='COBRANZAS_DESARROLLO';
+
+ROLE                         ROLE_ID PASSWORD AUTHENTICAT COM O INH IMP                                                                                                                                 
+------------------------- ---------- -------- ----------- --- - --- ---                                                                                                                                 
+EXTERNAL_NAME                                                                                                                                                                                           
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+COBRANZAS_DESARROLLO             106 NO       NONE        NO  N NO  NO                                                                                                                                  
+                                                                                                                                                                                                        
+                                                                                                                                                                                                        
+
+SQL> set line 200
+SQL> select * from role_sys_privs where role='COBRANZAS_DESARROLLO';
+
+ROLE                      PRIVILEGE                                ADM COM INH                                                                                                                          
+------------------------- ---------------------------------------- --- --- ---                                                                                                                          
+COBRANZAS_DESARROLLO      CREATE PROCEDURE                         NO  NO  NO                                                                                                                           
+COBRANZAS_DESARROLLO      CREATE TABLE                             NO  NO  NO                                                                                                                           
+COBRANZAS_DESARROLLO      CREATE VIEW                              NO  NO  NO                                                                                                                           
+
+SQL> set line 180
+SQL> col grantee format a25
+SQL> col granted_role format a25
+SQL> select * from dba_role_privs where grantee like 'COBRA%';
+
+GRANTEE                   GRANTED_ROLE              ADM DEL DEF COM INH                                                                                                             
+------------------------- ------------------------- --- --- --- --- ---                                                                                                             
+COBRANZAS                 COBRANZAS_DESARROLLO      NO  NO  YES NO  NO                                                                                                              
+COBRANZAS_DESARROLLO      CONNECT                   NO  NO  YES NO  NO                                                                                                              
+COBRANZAS                 CONNECT                   NO  NO  YES NO  NO                                                                                                              
+
+SQL> set line 200
+SQL> col role format a25
+SQL> col EXTERNAL_NAME format a25
+SQL> select * from dba_roles where role='COBRANZAS_DESARROLLO';
+
+ROLE                         ROLE_ID PASSWORD AUTHENTICAT COM O INH IMP EXTERNAL_NAME                                                                                                                   
+------------------------- ---------- -------- ----------- --- - --- --- -------------------------                                                                                                       
+COBRANZAS_DESARROLLO             106 NO       NONE        NO  N NO  NO                                                                                                                                  
+
+SQL> SPOOL off

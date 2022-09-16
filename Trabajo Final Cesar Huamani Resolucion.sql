@@ -504,3 +504,33 @@ set line 180
 col TABLESPACE_NAME format a25
 col username format a25	 	   
 SELECT * FROM DBA_TS_QUOTAS;
+
+
+/*
+PREGUNTA 07
+
+https://sites.google.com/a/espe.edu.ec/bases-de-datos-ii/introduccion/bdd-objeto-relacional/privilegios-y-usuarios-en-oracle
+
+*/
+
+create role COBRANZAS_DESARROLLO;
+
+grant connect, create view,create table, create procedure  to COBRANZAS_DESARROLLO;
+
+grant COBRANZAS_DESARROLLO to COBRANZAS;
+
+--rol
+set line 200
+col role format a25
+col EXTERNAL_NAME format a25
+select * from dba_roles where role='COBRANZAS_DESARROLLO';
+
+--previlegios del sistema
+set line 200
+select * from role_sys_privs where role='COBRANZAS_DESARROLLO';
+
+--los roles asiganados a los usuarios
+set line 180
+col grantee format a25	
+col granted_role format a25
+select * from dba_role_privs where grantee like 'COBRA%';
