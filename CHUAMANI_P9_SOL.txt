@@ -1,0 +1,25 @@
+SQL> CREATE INDEX INDEX_RUC ON PROVEEDOR (RUC)
+  2  TABLESPACE COBRANZAS_INDEX;
+
+Índice creado.
+
+SQL> CREATE BITMAP INDEX INDEX_SEXO ON TRABAJADOR (SEXO)
+  2  TABLESPACE COBRANZAS_INDEX;
+
+Índice creado.
+
+SQL> col table_name format a20
+SQL> col index_name format a30
+SQL> select table_name,index_name,index_type
+  2  from user_indexes
+  3  where table_owner='COBRANZAS'
+  4  ;
+
+TABLE_NAME           INDEX_NAME                     INDEX_TYPE                                                                                                                                          
+-------------------- ------------------------------ ---------------------------                                                                                                                         
+PROVEEDOR            ID_PROVEEDOR_PK                NORMAL                                                                                                                                              
+PROVEEDOR            INDEX_RUC                      NORMAL                                                                                                                                              
+TRABAJADOR           ID_TRABAJADOR_PK               NORMAL                                                                                                                                              
+TRABAJADOR           INDEX_SEXO                     BITMAP                                                                                                                                              
+
+SQL> spool off
