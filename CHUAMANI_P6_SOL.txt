@@ -1,0 +1,33 @@
+SQL> select username from DBA_users where username like '%COBR%';
+
+USERNAME                                                                                                                                                                            
+-------------------------                                                                                                                                                           
+COBRANZAS                                                                                                                                                                           
+
+SQL> ALTER USER COBRANZAS QUOTA UNLIMITED ON COBRANZAS_DATA;
+
+Usuario modificado.
+
+SQL> ALTER USER COBRANZAS QUOTA 20M ON COBRANZAS_INDEX;
+
+Usuario modificado.
+
+SQL> set line 180
+SQL> col TABLESPACE_NAME format a25
+SQL> col username format a25
+SQL> SELECT * FROM DBA_TS_QUOTAS;
+
+TABLESPACE_NAME           USERNAME                       BYTES  MAX_BYTES     BLOCKS MAX_BLOCKS DRO                                                                                 
+------------------------- ------------------------- ---------- ---------- ---------- ---------- ---                                                                                 
+SYSAUX                    AUDSYS                       1310720         -1        160         -1 NO                                                                                  
+SYSAUX                    APPQOSSYS                          0         -1          0         -1 NO                                                                                  
+SYSAUX                    DBSFWUSER                          0         -1          0         -1 NO                                                                                  
+SYSAUX                    GSMADMIN_INTERNAL             917504         -1        112         -1 NO                                                                                  
+SYSAUX                    GGSYS                              0         -1          0         -1 NO                                                                                  
+SYSAUX                    OLAPSYS                            0         -1          0         -1 NO                                                                                  
+COBRANZAS_DATA            COBRANZAS                          0         -1          0         -1 NO                                                                                  
+COBRANZAS_INDEX           COBRANZAS                          0   20971520          0       2560 NO                                                                                  
+
+8 filas seleccionadas.
+
+SQL> spool off

@@ -117,18 +117,20 @@ CONN SYS AS SYSDBA
 show pdbs
 --sqlplus / as sysdba alter system set db_create_file_dest='C:\app\Cesar\product\18.0.0\oradata\XE\PDB_CH';
 
-CREATE PLUGGABLE DATABASE PDB_CH
+CREATE PLUGGABLE DATABASE PDB_HH
 ADMIN USER pdbch IDENTIFIED BY pdbch ROLES=(CONNECT)
-file_name_convert = ('pdbseed','PDB_CH');
+file_name_convert = ('pdbseed','PDB_HH');
 
 
-alter pluggable database PDB_CH open;
+alter pluggable database PDB_HH open;
 
 alter pluggable database PDB_CH save state;
 
-alter session set container=PDB_CH;
+alter session set container=PDB_HH;
 
-connect pdbch/pdbch@PDB_CH as sysdba;
+alter pluggable database PDB_AH open;
+
+connect pdbch/pdbch@PDB_HH as sysdba;
 
 set line 150
 col file_name format a60
@@ -413,3 +415,92 @@ connect cobranzas/Lima1234@PDB_CH;
 
 select username from DBA_users;
 
+
+/*
+Asignar al usuario COBRANZAS las siguientes cuotas de almacenamiento: 
+•	Espacio de tablespace COBRANZAS_DATA  ilimitado 
+•	Espacio de tablespace COBRANZAS_INDEX  20 MB 
+Realice las consultas del diccionario de datos para validar las asignaciones. 
+
+--PARA ERROR: nombre de usuario o rol com·n no vßlido
+alter session set "_ORACLE_SCRIPT"=true;
+
+*/
+
+
+
+/*
+ALTER USER cobranzas TEMPORARY TABLESPACE COBRANZAS_INDEX;
+ALTER USER cobranzas TEMPORARY TABLESPACE COBRANZAS_INDEX
+quota 20M on COBRANZAS_INDEX; 
+
+alter user cobranzas temporary tablespace COBRANZAS_INDEX; 
+
+ALTER DATABASE temporary TABLESPACE users;
+
+
+alter user COBRANZAS identified by juancito
+
+ 
+alter user COBRANZAS
+default tablespace COBRANZAS_DATA
+TEMPORARY tablespace COBRANZAS_INDEX
+QUOTA UNLIMITED ON COBRANZAS_DATA
+quota 20M on COBRANZAS_INDEX;
+
+alter user COBRANZAS
+default tablespace COBRANZAS_DATA
+QUOTA UNLIMITED ON COBRANZAS_DATA
+
+TEMPORARY tablespace COBRANZAS_INDEX
+quota 20M on COBRANZAS_INDEX;
+
+CREATE USER miusuario IDENTIFIED BY miclavesecreta
+       DEFAULT TABLESPACE data  
+       TEMPORARY TABLESPACE temp
+       QUOTA UNLIMITED ON data;
+
+
+
+set line 180
+col TABLESPACE_NAME format a40	   
+SELECT * FROM DBA_TS_QUOTAS;	   
+
+
+set line 180
+col TABLESPACE_NAME format a15
+col FILE_NAME format a60
+select tablespace_name,file_name,bytes from dba_data_files;
+
+
+ALTER USER cobranzas QUOTA UNLIMITED ON COBRANZAS_DATA;
+
+
+--Para modificar la tabla temporal
+ALTER DATABASE DEFAULT TEMPORARY TABLESPACE COBRANZAS_INDEX;
+
+SELECT * FROM DBA_TS_QUOTAS;
+
+
+
+col profile format a12
+col RESOURCE_NAME format a25
+col limit format a15
+set pagesize 100
+select * from dba_profiles where profile='DEFAULT';
+
+
+select * from DBA_ROLES;
+select * from DBA_ROLE_PRIVS order by GRANTEE;*/
+
+select username from DBA_users where username like '%COBR%';
+
+ALTER USER COBRANZAS QUOTA UNLIMITED ON COBRANZAS_DATA;
+
+ALTER USER COBRANZAS QUOTA 20M ON COBRANZAS_INDEX;
+
+--MAX_BYTES - Cuota del usuario en bytes, o -1 si no hay límite
+set line 180
+col TABLESPACE_NAME format a25
+col username format a25	 	   
+SELECT * FROM DBA_TS_QUOTAS;
