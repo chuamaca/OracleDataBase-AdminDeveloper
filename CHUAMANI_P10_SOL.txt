@@ -1,0 +1,144 @@
+SQL> show con_name;
+
+CON_NAME                                                                                                                                                                                                
+------------------------------                                                                                                                                                                          
+PDB_CH                                                                                                                                                                                                  
+SQL> CREATE USER Ricco IDENTIFIED BY Ricco12
+  2  DEFAULT TABLESPACE COBRANZAS_DATA
+  3  TEMPORARY TABLESPACE TEMP;
+CREATE USER Ricco IDENTIFIED BY Ricco12
+*
+ERROR en línea 1:
+ORA-01031: privilegios insuficientes 
+
+
+SQL> conn sys/oracle@PDB_CH as sysdba;
+Conectado.
+SQL> CREATE USER Ricco IDENTIFIED BY Ricco12
+  2  DEFAULT TABLESPACE COBRANZAS_DATA
+  3  TEMPORARY TABLESPACE TEMP;
+
+Usuario creado.
+
+SQL> grant connect to Ricco with admin option;
+
+Concesión terminada correctamente.
+
+SQL> CREATE ROLE Administrador;
+
+Rol creado.
+
+SQL> GRANT CREATE TABLE TO Administrador;
+
+Concesión terminada correctamente.
+
+SQL> grant Administrador to Ricco;
+
+Concesión terminada correctamente.
+
+SQL> conn Ricco/Ricco12@PDB_CH;
+Conectado.
+SQL> Create table Ricco.orden(col1 char(1));
+
+Tabla creada.
+
+SQL> Create table Ricco.orden_detalle (col1 char(1));
+
+Tabla creada.
+
+SQL> conn sys/oracle@PDB_CH as sysdba;
+Conectado.
+SQL> CREATE USER Paco IDENTIFIED BY Paco12
+  2  DEFAULT TABLESPACE COBRANZAS_DATA
+  3  TEMPORARY TABLESPACE TEMP;
+
+Usuario creado.
+
+SQL> CREATE USER Luis IDENTIFIED BY Luis12
+  2  DEFAULT TABLESPACE COBRANZAS_DATA
+  3  TEMPORARY TABLESPACE TEMP;
+
+Usuario creado.
+
+SQL> CREATE ROLE Operador;
+
+Rol creado.
+
+SQL> grant select, insert, update, delete on Ricco.orden to Operador;
+
+Concesión terminada correctamente.
+
+SQL> grant select, insert, update, delete on Ricco.orden_detalle to Operador;
+
+Concesión terminada correctamente.
+
+SQL> grant Operador to Luis;
+
+Concesión terminada correctamente.
+
+SQL> grant Operador to Administrador;
+
+Concesión terminada correctamente.
+
+SQL> CREATE ROLE Vendedor;
+
+Rol creado.
+
+SQL> grant insert on Ricco.orden to Vendedor;
+
+Concesión terminada correctamente.
+
+SQL> grant insert on Ricco.orden_detalle to Vendedor;
+
+Concesión terminada correctamente.
+
+SQL> grant Vendedor to Ricco, Paco;
+
+Concesión terminada correctamente.
+
+SQL> grant Vendedor to Administrador;
+
+Concesión terminada correctamente.
+
+SQL> CREATE ROLE Accesos_Basicos;
+
+Rol creado.
+
+SQL> GRANT CREATE SESSION TO Accesos_Basicos ;
+
+Concesión terminada correctamente.
+
+SQL> grant Accesos_Basicos to Administrador, Vendedor, Operador;
+
+Concesión terminada correctamente.
+
+SQL> set line 180
+SQL> col grantee format a25
+SQL> col granted_role format a25
+SQL> select * from dba_role_privs where grantee like '%ADMINISTRADOR%';
+
+GRANTEE                   GRANTED_ROLE              ADM DEL DEF COM INH                                                                                                             
+------------------------- ------------------------- --- --- --- --- ---                                                                                                             
+ADMINISTRADOR             ACCESOS_BASICOS           NO  NO  YES NO  NO                                                                                                              
+ADMINISTRADOR             VENDEDOR                  NO  NO  YES NO  NO                                                                                                              
+ADMINISTRADOR             OPERADOR                  NO  NO  YES NO  NO                                                                                                              
+
+SQL> set line 180
+SQL> col grantee format a25
+SQL> col granted_role format a25
+SQL> select * from dba_role_privs where grantee  like '%VENDEDOR%';
+
+GRANTEE                   GRANTED_ROLE              ADM DEL DEF COM INH                                                                                                             
+------------------------- ------------------------- --- --- --- --- ---                                                                                                             
+VENDEDOR                  ACCESOS_BASICOS           NO  NO  YES NO  NO                                                                                                              
+
+SQL> set line 180
+SQL> col grantee format a25
+SQL> col granted_role format a25
+SQL> select * from dba_role_privs where grantee like '%OPERADOR%';
+
+GRANTEE                   GRANTED_ROLE              ADM DEL DEF COM INH                                                                                                             
+------------------------- ------------------------- --- --- --- --- ---                                                                                                             
+OPERADOR                  ACCESOS_BASICOS           NO  NO  YES NO  NO                                                                                                              
+
+SQL> spool off;

@@ -1,0 +1,109 @@
+SQL> CREATE PROFILE SALES_PROFILE LIMIT
+  2  IDLE_TIME 60
+  3  SESSIONS_PER_USER 1
+  4  FAILED_LOGIN_ATTEMPTS 3;
+
+Perfil creado.
+
+SQL> alter user Hugo profile SALES_PROFILE;
+alter user Hugo profile SALES_PROFILE
+           *
+ERROR en línea 1:
+ORA-01918: el usuario 'HUGO' no existe 
+
+
+SQL> show con_name;
+
+CON_NAME                                                                                                                                                                            
+------------------------------                                                                                                                                                      
+PDB_CH                                                                                                                                                                              
+SQL> conn sys/oracle@PDB_CH as sysdba;
+Conectado.
+SQL> CREATE PROFILE SALES_PROFILE LIMIT
+  2  IDLE_TIME 60
+  3  SESSIONS_PER_USER 1
+  4  FAILED_LOGIN_ATTEMPTS 3;
+CREATE PROFILE SALES_PROFILE LIMIT
+*
+ERROR en línea 1:
+ORA-02379: el perfil SALES_PROFILE ya existe 
+
+
+SQL> alter user Hugo profile SALES_PROFILE;
+alter user Hugo profile SALES_PROFILE
+           *
+ERROR en línea 1:
+ORA-01918: el usuario 'HUGO' no existe 
+
+
+SQL> CREATE USER Hugo IDENTIFIED BY Hugo12
+  2  DEFAULT TABLESPACE COBRANZAS_DATA
+  3  TEMPORARY TABLESPACE TEMP;
+
+Usuario creado.
+
+SQL> CREATE USER Paco IDENTIFIED BY Paco12
+  2  DEFAULT TABLESPACE COBRANZAS_DATA
+  3  TEMPORARY TABLESPACE TEMP;
+CREATE USER Paco IDENTIFIED BY Paco12
+            *
+ERROR en línea 1:
+ORA-01920: conflicto entre el nombre de usuario 'PACO' y otro nombre de usuario o rol 
+
+
+SQL> CREATE USER Paco IDENTIFIED BY Paco12
+  2  DEFAULT TABLESPACE COBRANZAS_DATA
+  3  TEMPORARY TABLESPACE TEMPasdad;
+CREATE USER Paco IDENTIFIED BY Paco12
+            *
+ERROR en línea 1:
+ORA-01920: conflicto entre el nombre de usuario 'PACO' y otro nombre de usuario o rol 
+
+
+SQL> alter user Hugo profile SALES_PROFILE;
+
+Usuario modificado.
+
+SQL> 
+SQL> alter user Paco profile SALES_PROFILE;
+
+Usuario modificado.
+
+SQL> col username format a20
+SQL> col profile format a20
+SQL> select username,profile from dba_users where profile='SALES_PROFILE';
+
+USERNAME             PROFILE                                                                                                                                                        
+-------------------- --------------------                                                                                                                                           
+PACO                 SALES_PROFILE                                                                                                                                                  
+HUGO                 SALES_PROFILE                                                                                                                                                  
+
+SQL> col profile format a20
+SQL> col RESOURCE_NAME format a25
+SQL> col limit format a15
+SQL> set pagesize 100
+SQL> select * from dba_profiles where profile='SALES_PROFILE';
+
+PROFILE              RESOURCE_NAME             RESOURCE LIMIT           COM INH IMP                                                                                                 
+-------------------- ------------------------- -------- --------------- --- --- ---                                                                                                 
+SALES_PROFILE        COMPOSITE_LIMIT           KERNEL   DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        SESSIONS_PER_USER         KERNEL   1               NO  NO  NO                                                                                                  
+SALES_PROFILE        CPU_PER_SESSION           KERNEL   DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        CPU_PER_CALL              KERNEL   DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        LOGICAL_READS_PER_SESSION KERNEL   DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        LOGICAL_READS_PER_CALL    KERNEL   DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        IDLE_TIME                 KERNEL   60              NO  NO  NO                                                                                                  
+SALES_PROFILE        CONNECT_TIME              KERNEL   DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        PRIVATE_SGA               KERNEL   DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        FAILED_LOGIN_ATTEMPTS     PASSWORD 3               NO  NO  NO                                                                                                  
+SALES_PROFILE        PASSWORD_LIFE_TIME        PASSWORD DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        PASSWORD_REUSE_TIME       PASSWORD DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        PASSWORD_REUSE_MAX        PASSWORD DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        PASSWORD_VERIFY_FUNCTION  PASSWORD DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        PASSWORD_LOCK_TIME        PASSWORD DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        PASSWORD_GRACE_TIME       PASSWORD DEFAULT         NO  NO  NO                                                                                                  
+SALES_PROFILE        INACTIVE_ACCOUNT_TIME     PASSWORD DEFAULT         NO  NO  NO                                                                                                  
+
+17 filas seleccionadas.
+
+SQL> spool off;

@@ -538,6 +538,12 @@ select * from dba_role_privs where grantee like 'COBRA%';
 
 
 
+
+
+
+
+
+
 /*
 PREGUNTA 08
 
@@ -607,4 +613,119 @@ col table_name format a20
 col index_name format a30
 select table_name,index_name,index_type
 from user_indexes
-where table_owner='COBRANZAS'
+where table_owner='COBRANZAS';
+
+
+/*P10
+
+*/
+
+
+CREATE USER Ricco IDENTIFIED BY Ricco12 
+DEFAULT TABLESPACE COBRANZAS_DATA
+TEMPORARY TABLESPACE TEMP;
+
+grant connect to Ricco with admin option;
+
+CREATE ROLE Administrador;
+GRANT CREATE TABLE TO Administrador;
+
+grant Administrador to Ricco;
+
+--Usuario Rico.
+Create table Ricco.orden(col1 char(1)); 
+Create table Ricco.orden_detalle (col1 char(1)); 
+
+
+
+CREATE USER Hugo IDENTIFIED BY Hugo12 
+DEFAULT TABLESPACE COBRANZAS_DATA
+TEMPORARY TABLESPACE TEMP;
+
+
+CREATE USER Paco IDENTIFIED BY Paco12 
+DEFAULT TABLESPACE COBRANZAS_DATA
+TEMPORARY TABLESPACE TEMP;
+
+CREATE USER Luis IDENTIFIED BY Luis12 
+DEFAULT TABLESPACE COBRANZAS_DATA
+TEMPORARY TABLESPACE TEMP;
+
+
+
+CREATE ROLE Operador;
+grant select, insert, update, delete on Ricco.orden to Operador;
+grant select, insert, update, delete on Ricco.orden_detalle to Operador;
+
+grant Operador to Luis;
+
+grant Operador to Administrador;
+
+
+
+-- ROLE SQL
+CREATE ROLE Vendedor;
+
+grant insert on Ricco.orden to Vendedor;
+grant insert on Ricco.orden_detalle to Vendedor;
+
+
+grant Vendedor to Hugo, Paco;
+grant Vendedor to Administrador;
+
+
+
+-- ROLE SQL
+CREATE ROLE Accesos_Basicos;
+GRANT CREATE SESSION TO Accesos_Basicos ;
+
+
+grant Accesos_Basicos to Administrador, Vendedor, Operador;
+
+
+set line 180
+col grantee format a25	
+col granted_role format a25
+select * from dba_role_privs where grantee like '%ADMINISTRADOR%';
+
+
+
+set line 180
+col grantee format a25	
+col granted_role format a25
+select * from dba_role_privs where grantee  like '%VENDEDOR%';
+
+
+set line 180
+col grantee format a25	
+col granted_role format a25
+select * from dba_role_privs where grantee like '%OPERADOR%';
+
+
+
+/*
+PREGUNTA 11
+
+*/
+
+CREATE PROFILE SALES_PROFILE LIMIT
+IDLE_TIME 60
+SESSIONS_PER_USER 1
+FAILED_LOGIN_ATTEMPTS 3;
+
+alter user Hugo profile SALES_PROFILE;
+
+alter user Paco profile SALES_PROFILE;
+
+
+col username format a20
+col profile format a20
+select username,profile from dba_users where profile='SALES_PROFILE';
+
+col profile format a20
+col RESOURCE_NAME format a25
+col limit format a15
+set pagesize 100
+select * from dba_profiles where profile='SALES_PROFILE';
+
+
